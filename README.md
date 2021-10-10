@@ -1,6 +1,10 @@
 # cloud-based-tool-SA
 A cloud-based tool for sentiment analysis in reviews about restaurants on TripAdvisor.
 
+## Dependencies
+- Vagrant 
+- The others are self-contained (check Vagrantfile and docker-compose.yml and Dockerfile)
+
 ## How do I cite this work?
 
 Please, cite this paper
