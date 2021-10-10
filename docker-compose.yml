@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db:
+    container_name: restaurant_db
+    build:
+      context: db
+      dockerfile: Dockerfile
+    volumes:
+      - /home/vagrant/restaurant_db:/data/db
+  app:
+    container_name: restaurant_app
+    build:
+      context: app
+      dockerfile: Dockerfile
+    links:
+      - db
+  nginx:
+    build:
+      context: nginx
+      dockerfile: Dockerfile
+    container_name: restaurant_nginx
+    links:
+      - app
+    ports:
+      - '80:80'
+  scrap:
+    container_name: restaurant_scrap
+    build:
+      context: scrap
+      dockerfile: Dockerfile
+    links:
+      - db
+      - app
+

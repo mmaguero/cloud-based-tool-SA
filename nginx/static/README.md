@@ -1,0 +1,2 @@
+
+*PUT HERE YOUR STATIC FILES: JS, CSS, ...*

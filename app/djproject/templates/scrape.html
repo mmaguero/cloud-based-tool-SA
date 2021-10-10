@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+{% for r in result %}
+<div>
+{% if r.status == "ok" %}
+<div class="row alert alert-success">
+<h3>{{r.spider_name}} Bot</h3>
+</div>
+<div class="text-success">
+<div class="row">
+<strong>{{r.items}}&nbsp;</strong> restaurants
+</div>
+<div class="row">
+<strong>{{r.items_dropped}}&nbsp;</strong> restaurants excluded
+</div>
+<div class="row">
+Started at <strong>&nbsp;{{r.stats.start_time}}&nbsp;</strong> and finished at <strong>&nbsp;{{r.stats.finish_time}}&nbsp;</strong> by  reason: <strong>&nbsp;{{r.stats.finish_reason}}</strong>
+</div>
+</div>
+{% endif %}
+{% if r.status == "error" %}
+<div class="text-danger">
+<div class="row">
+<strong>{{r.code}} | {{r.message}}</strong>
+</div>
+</div>
+{% endif %}
+</div>
+{% endfor %}
+
+{% endblock %}

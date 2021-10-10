@@ -1,0 +1,159 @@
+
+{% extends "base.html" %}
+
+{% block contenido %}
+
+<script>
+$(function(){                          // jQuery functions
+
+ 	$('#rate').click(function(){
+		$.ajax({
+
+		   url: "{% url 'i_ajax' %}?i=rate",
+
+		   type: 'GET',
+
+		   data: {},
+
+		   error: function() {
+				alert('Error en llamada Ajax');
+		   },
+
+		   dataType: 'json',   // espera json en la respuesta
+
+		   success: function(data) {
+                      console.log(data)
+                      $('#aqui').attr("src", data.url);
+                      $('#myModal').modal();
+		   },
+		});  // ajax
+
+    	}); // click
+        $('#city').click(function(){
+		$.ajax({
+
+		   url: "{% url 'i_ajax' %}?i=city",
+
+		   type: 'GET',
+
+		   data: {},
+
+		   error: function() {
+				alert('Error en llamada Ajax');
+		   },
+
+		   dataType: 'json',   // espera json en la respuesta
+
+		   success: function(data) {
+                      console.log(data)
+                      $('#aqui').attr("src", data.url);
+                      $('#myModal').modal();
+		   },
+		});  // ajax
+
+    	}); // click
+        $('#review').click(function(){
+		$.ajax({
+
+		   url: "{% url 'i_ajax' %}?i=review",
+
+		   type: 'GET',
+
+		   data: {},
+
+		   error: function() {
+				alert('Error en llamada Ajax');
+		   },
+
+		   dataType: 'json',   // espera json en la respuesta
+
+		   success: function(data) {
+                      console.log(data)
+                      $('#aqui').attr("src", data.url);
+                      $('#myModal').modal();
+		   },
+		});  // ajax
+
+    	}); // click
+        $('#user').click(function(){
+		$.ajax({
+
+		   url: "{% url 'i_ajax' %}?i=user",
+
+		   type: 'GET',
+
+		   data: {},
+
+		   error: function() {
+				alert('Error en llamada Ajax');
+		   },
+
+		   dataType: 'json',   // espera json en la respuesta
+
+		   success: function(data) {
+                      console.log(data)
+                      $('#aqui').attr("src", data.url);
+                      $('#myModal').modal();
+		   },
+		});  // ajax
+
+    	}); // click
+}); // $
+</script>
+
+<div class="jumbotron">
+  <h1>Gastro-miner</h1>
+  <p class="lead">A Cloud-Based Tool for the Sentiment Analysis in Reviews about Restaurants on TripAdvisor:</p> 
+  <p>Case Study on Restaurants of the Province of Granada</p>
+
+<hr class="my-4">
+
+          <section class="row text-center placeholders">
+            <div class="col-6 col-sm-3 placeholder">
+              <a href="#" id="rate" title="Clic for show Large Image"><img src="{% url 'globali' %}?i=rate" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></a>
+              <h4>Global Rating</h4>
+              <div class="text-muted">Ratings (1 to 5 stars) of Restaurants on the Province of Granada</div>
+            </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <a href="#" id="city" title="Clic for show Large Image">
+                 <img src="{% url 'globali' %}?i=city" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail">
+              </a>
+              <h4>Restaurants by Locality</h4>
+              <span class="text-muted">Localities with more Restaurants</span>
+            </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <a href="#" id="review" title="Clic for show Large Image"><img src="{% url 'globali' %}?i=review" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></a>
+              <h4>Restaurants by Reviews</h4>
+              <span class="text-muted">Restaurants with more reviews</span>
+            </div>
+            <div class="col-6 col-sm-3 placeholder">
+              <a href="#" id="user" title="Clic for show Large Image"><img src="{% url 'globali' %}?i=user" width="200" height="200" class="img-fluid rounded-circle" alt="Generic placeholder thumbnail"></a>
+              <h4>Top Users</h4>
+              <span class="text-muted">Users with more reviews</span>
+            </div>
+          </section>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Stats</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body"> 
+        <div class="text-center">
+           <img id="aqui" src="#" class="img-fluid img-thumbnail center-block">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br />
+
+{% endblock %}

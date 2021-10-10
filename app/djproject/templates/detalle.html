@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+<script>
+$(function(){                          // jQuery functions
+
+ 		$('#btd').click(function() {
+                //$('#myModal').modal();
+		$.ajax({
+
+		   url: "{% url 'r_ajax' resta.id %}",
+
+		   type: 'GET',
+
+		   data: {},
+
+		   error: function() {
+				alert('Error en llamada Ajax');
+		   },
+
+		   dataType: 'json',   // espera json en la respuesta
+
+		   success: function(data) {
+                      console.log(data)
+                      $('#aqui').html(data.map);
+                      $('#myModal').modal();
+		   },
+		});  // ajax
+
+    	}); // click
+}); // $
+</script>
+
+<div class="jumbotron">
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+
+    <h3 class="media-heading">{{ resta.name }} 
+       <small class="text-muted">
+ <span class="badge badge-pill badge-dark">{{ resta.avg_stars }}&#9733;</span> <br />
+       {% if restaSentiment.compound < 0.35 and restaSentiment.compound >= 0.00 %}
+             <span class="badge badge-pill badge-warning" title="{{restaSentiment.compound}}">=</span>
+       {% endif %}
+       {% if restaSentiment.compound < 0.00 %} 
+             <span class="badge badge-pill badge-danger" title="{{restaSentiment.compound}}">-</span>
+       {% endif %}
+       {% if restaSentiment.compound >= 0.35 %}
+             <span class="badge badge-pill badge-success" title="{{restaSentiment.compound}}">+</span>
+       {% endif %} »
+        <span class="badge badge-pill badge-danger" title="{{restaSentiment.neg}}">😠 {{restaSentiment.neg|floatformat:2}}</span>
+        <span class="badge badge-pill badge-warning" title="{{restaSentiment.neu}}">😐 {{restaSentiment.neu|floatformat:2}}</span>
+        <span class="badge badge-pill badge-success" title="{{restaSentiment.pos}}">😊 {{restaSentiment.pos|floatformat:2}}</span>
+       </small> 
+    </h3>
+
+   <p class="text-info">View on 
+      <a href="{{resta.url}}" title="{{resta.url}}" target="_blank">{{ resta.origin }}</a>
+   </p>
+   
+    <address>
+    {{ resta.address.street}}
+    {% if resta.address.locality%}
+              <br>{{resta.address.locality}}
+    {% endif %}
+    {% if resta.address.postal_code %}
+              {{resta.address.postal_code}}
+    {% endif %}
+    {% if resta.address.country %}
+             <br>({{resta.address.country}})
+    {% endif %}
+    <br>
+    </address>
+  </div>
+
+ <button id="btd" type="button" class="btn btn-sm btn-link">
+  See it in Google Maps!
+ </button>
+
+ <small class="text-info">Updated at {{resta.datetime}} </small>
+
+  </div>
+
+<div class="text-center">
+ <img src="{% url 'imagen' resta.id %}" alt="{{ resta.name }}" class="img-fluid img-thumbnail center-block">
+  <!--{% if resta.image %}
+     <img src="{% url 'imagen' resta.name %}" alt="{{ resta.name }}" class="img-fluid img-thumbnail center-block">
+  {% else %}
+     <div class="container"><img src="#" alt="No Image" class="img-fluid img-thumbnail center-block"></div>
+  {% endif %}  -->
+  </div>
+
+</div>
+
+<!-- Button trigger modal
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Launch demo modal
+</button> -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ resta.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="aqui">
+        ...Contenido
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- For reviews -->
+
+<h5>Users Reviews <small class="text-muted">({{countReviews}})</small> </h5>
+
+  {% if resta.reviews %}
+  <div class="row breadcrumb">
+    <div class="col-2"><strong>User</strong></div>
+    <div class="col-sm"><strong>Rating</strong></div>
+    <div class="col-2"><strong>Date</strong></div>
+    <div class="col-sm"><strong>Title</strong></div>
+    <div class="col-sm"><p class="text-left"><strong>Sentiment</strong></p></div>
+  </div>
+    {% for r in resta.reviews %}
+    <div class="row" id="{{r.user}}">
+      <div class="col-2">
+        <span><small><a href="/resta/user/?user={{r.user}}" title="{{r.user}}" >{{r.user}}</a></small></span>
+      </div>
+      <div class="col-sm">
+         {% if r.stars == 5 %}
+             <span class="badge badge-pill badge-success">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9733;&#9733;
+         {% endif %}
+         {% if r.stars == 4 %}
+             <span class="badge badge-pill badge-success">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9733;&#9734;
+         {% endif %}
+         {% if r.stars == 3 %}
+             <span class="badge badge-pill badge-warning">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars == 2 %}
+             <span class="badge badge-pill badge-danger">{{r.stars}}</span>&#9733;&#9733;&#9734;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars == 1 %}
+             <span class="badge badge-pill badge-danger">{{r.stars}}</span>&#9733;&#9734;&#9734;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars <= 0 %}
+             <span class="badge badge-pill badge-dark">{{r.stars}}</span>&#9734;&#9734;&#9734;&#9734;&#9734;
+         {% endif %}
+      </div>
+      <div class="col-2"><small>{{ r.date }}</small></div>
+      <div class="col-sm">
+        {% if r.title_res.compound < 0.35 and r.title_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.title_res.compound}}">=</span>
+        {% endif %}
+        {% if r.title_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.title_res.compound}}">-</span>
+        {% endif %}
+        {% if r.title_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.title_res.compound}}">+</span>
+        {% endif %}
+        <small><em>{{r.title}}</em></small>
+      </div>
+      <div class="col-sm">    
+        {% if r.review_res.compound < 0.35 and r.review_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.review_res.compound}}">=</span>
+        {% endif %}
+        {% if r.review_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.review_res.compound}}">-</span>
+        {% endif %}
+        {% if r.review_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.review_res.compound}}">+</span>
+        {% endif %} »
+        <span class="badge badge-pill badge-danger" title="{{r.review_res.neg}}">😠 {{r.review_res.neg|floatformat:2}}</span>
+        <span class="badge badge-pill badge-warning" title="{{r.review_res.neu}}">😐 {{r.review_res.neu|floatformat:2}}</span>
+        <span class="badge badge-pill badge-success" title="{{r.review_res.pos}}">😊 {{r.review_res.pos|floatformat:2}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-auto">
+        {% if r.description_res.compound < 0.35 and r.description_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.description_res.compound}}">=</span>
+        {% endif %}
+        {% if r.description_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.description_res.compound}}">-</span>
+        {% endif %}
+        {% if r.description_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.description_res.compound}}">+</span>
+        {% endif %}
+        <small class="text-justify">
+        {% for descrip in r.description %} 
+         {{descrip}}<br />
+        {% endfor %}
+        </small>
+      </div>
+    </div>
+  <div class="row"><hr /></div>
+    {% endfor %}
+ {% else %}
+ <div class="row breadcrumb">
+  <span class="text-center">Sorry! No reviews writes in english</span>
+ </div>
+ {% endif %}
+
+{% endblock %}

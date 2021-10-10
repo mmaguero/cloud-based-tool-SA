@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block contenido %}
+
+<div class="jumbotron">
+<div class="row">
+
+  <div class="col-sm-12 col-md-6">
+
+    <h3 class="media-heading">{{ username }} 
+       <small class="text-muted">
+ <span class="badge badge-pill badge-dark">{{ userStars|floatformat:2 }}&#9733;</span> <br />
+       {% if restaSentiment.compound < 0.35 and restaSentiment.compound >= 0.00 %}
+             <span class="badge badge-pill badge-warning" title="{{restaSentiment.compound}}">=</span>
+       {% endif %}
+       {% if restaSentiment.compound < 0.00 %} 
+             <span class="badge badge-pill badge-danger" title="{{restaSentiment.compound}}">-</span>
+       {% endif %}
+       {% if restaSentiment.compound >= 0.35 %}
+             <span class="badge badge-pill badge-success" title="{{restaSentiment.compound}}">+</span>
+       {% endif %} »
+        <span class="badge badge-pill badge-danger" title="{{restaSentiment.neg}}">😠 {{restaSentiment.neg|floatformat:2}}</span>
+        <span class="badge badge-pill badge-warning" title="{{restaSentiment.neu}}">😐 {{restaSentiment.neu|floatformat:2}}</span>
+        <span class="badge badge-pill badge-success" title="{{restaSentiment.pos}}">😊 {{restaSentiment.pos|floatformat:2}}</span>
+       </small> 
+    </h3>
+
+   <p class="text-info">Peek other reviews made by the user on 
+      <a href="https://www.google.com/search?q={{ username }}+site:+tripAdvisor.com&oq={{ username }}+site:tripAdvisor.com" title="{{ username }}" target="_blank">tripadvisor.com</a>
+   </p>
+
+</div>
+
+</div>
+
+<div class="text-center">
+ <img src="{% url 'globali' %}?i=user&u={{ username }}" alt="{{ username }}" class="img-fluid img-thumbnail center-block">
+  </div>
+
+</div>
+
+<!-- For reviews -->
+
+<h5>Reviews <small class="text-muted">({{ countReviews }})</small></h5>
+
+<div class="row breadcrumb">
+  <div class="col-2"><strong>Restaurant</strong></div>
+  <div class="col-sm"><strong>Rating</strong></div>
+  <div class="col-2"><strong>Date</strong></div>
+  <div class="col-sm"><strong>Title</strong></div>
+  <div class="col-sm"><p class="text-left"><strong>Sentiment</strong></p></div>
+</div>
+{% for rr in resta %}
+  {% if rr.reviews %}
+    {% for r in rr.reviews %}
+    <div class="row" id="{{rr.name}}">
+      <div class="col-2">
+        <span>
+           <small><a href="{% url 'restaurant' rr.id %}" title="{{rr.name}}" >{{rr.name}}</a></small>
+           <span class="badge badge-pill badge-dark" title="from {{rr.origin}}">{{ rr.avg_stars }}&#9733;</span>
+        </span>
+      </div>
+      <div class="col-sm">
+         {% if r.stars == 5 %}
+             <span class="badge badge-pill badge-success">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9733;&#9733;
+         {% endif %}
+         {% if r.stars == 4 %}
+             <span class="badge badge-pill badge-success">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9733;&#9734;
+         {% endif %}
+         {% if r.stars == 3 %}
+             <span class="badge badge-pill badge-warning">{{r.stars}}</span>&#9733;&#9733;&#9733;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars == 2 %}
+             <span class="badge badge-pill badge-danger">{{r.stars}}</span>&#9733;&#9733;&#9734;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars == 1 %}
+             <span class="badge badge-pill badge-danger">{{r.stars}}</span>&#9733;&#9734;&#9734;&#9734;&#9734;
+         {% endif %}
+         {% if r.stars <= 0 %}
+             <span class="badge badge-pill badge-dark">{{r.stars}}</span>&#9734;&#9734;&#9734;&#9734;&#9734;
+         {% endif %}
+      </div>
+      <div class="col-2"><small>{{ r.date }}</small></div>
+      <div class="col-sm">
+        {% if r.title_res.compound < 0.35 and r.title_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.title_res.compound}}">=</span>
+        {% endif %}
+        {% if r.title_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.title_res.compound}}">-</span>
+        {% endif %}
+        {% if r.title_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.title_res.compound}}">+</span>
+        {% endif %}
+        <small><em>{{r.title}}</em></small>
+      </div>
+      <div class="col-sm">    
+        {% if r.review_res.compound < 0.35 and r.review_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.review_res.compound}}">=</span>
+        {% endif %}
+        {% if r.review_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.review_res.compound}}">-</span>
+        {% endif %}
+        {% if r.review_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.review_res.compound}}">+</span>
+        {% endif %} »
+        <span class="badge badge-pill badge-danger" title="{{r.review_res.neg}}">😠 {{r.review_res.neg|floatformat:2}}</span>
+        <span class="badge badge-pill badge-warning" title="{{r.review_res.neu}}">😐 {{r.review_res.neu|floatformat:2}}</span>
+        <span class="badge badge-pill badge-success" title="{{r.review_res.pos}}">😊 {{r.review_res.pos|floatformat:2}}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-auto">
+        {% if r.description_res.compound < 0.35 and r.description_res.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{r.description_res.compound}}">=</span>
+        {% endif %}
+        {% if r.description_res.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{r.description_res.compound}}">-</span>
+        {% endif %}
+        {% if r.description_res.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{r.description_res.compound}}">+</span>
+        {% endif %}
+        <small class="text-justify">
+        {% for descrip in r.description %} 
+         {{descrip}}<br />
+        {% endfor %}
+        </small>
+      </div>
+    </div>
+  <div class="row"><hr /></div>
+    {% endfor %}
+ {% else %}
+ <div class="row breadcrumb">
+  <span class="text-center">Sorry! No reviews writes in english</span>
+ </div>
+ {% endif %}
+{% endfor %}
+
+{% endblock %}

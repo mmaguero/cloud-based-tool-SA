@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<h3>Users 
+<small class="text-muted">(with reviews on Restaurants in the Province of Granada)</small>
+</h3>
+
+  <div class="row breadcrumb">
+    <div class="col-sm"><strong>Username</strong></div>
+    <div class="col-sm"><strong>Last Review</strong></div>
+    <div class="col-sm"><strong>Average Rating</strong></div>
+    <div class="col-sm"><strong>Reviews Nº</strong></div>
+    <div class="col-sm"></div>
+  </div>
+    {% for r in resta %}
+    <div class="row">
+      <div class="col-sm"><strong>{{r.name}}</strong></div>
+      <div class="col-sm">{{r.date}}</div>
+      <div class="col-sm"><h5>
+         {% if r.avg_stars <= 5 and r.avg_stars > 3.5 %}
+             <span class="badge badge-pill badge-success">{{r.avg_stars|floatformat:2}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars <= 3.5 and r.avg_stars >= 2.5 %}
+             <span class="badge badge-pill badge-warning">{{r.avg_stars|floatformat:2}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars < 2.5 %}
+             <span class="badge badge-pill badge-danger">{{r.avg_stars|floatformat:2}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == -1 %}
+             <span class="badge badge-pill badge-dark">{{r.avg_stars|floatformat:2}}&#9734;</span>
+         {% endif %}</h5>
+      </div>
+      <div class="col-sm">{{r.reviewsLength}}</div>
+      <div class="col-sm">
+      <form class="form-inline" method="get" action="{% url 'user' %}">
+       <input class="form-control invisible" type="hidden" name="user" value="{{r.name}}">
+       <button class="btn btn-md btn-secondary" type="submit">View »</button>
+      </form>
+      </div>
+    </div>
+  <div class="row"><hr /></div>
+    {% endfor %}
+
+{% endblock %}

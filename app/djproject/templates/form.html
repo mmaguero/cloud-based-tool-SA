@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<h3 class="media-heading">Computing on demand a Review <small class="text-muted">(Only in English)</small></h3>
+
+{% if sent %}
+<div class="alert alert-info" role="alert">
+
+<div class="row">
+<div class="col-sm-auto">
+        {% if sentt.compound < 0.35 and sentt.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{sentt.compound}}">=</span>
+        {% endif %}
+        {% if sentt.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{sentt.compound}}">-</span>
+        {% endif %}
+        {% if sentt.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{sentt.compound}}">+</span>
+        {% endif %}
+        <span class="text-info"><small>Title</small></span>
+</div>
+<div class="col-sm-auto">
+        {% if sentd.compound < 0.35 and sentd.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{sentd.compound}}">=</span>
+        {% endif %}
+        {% if sentd.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{sentd.compound}}">-</span>
+        {% endif %}
+        {% if sentd.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{sentd.compound}}">+</span>
+        {% endif %}
+        <span class="text-info"><small>Description</small></span>
+</div>
+<div class="col-sm-auto">    
+        <span class="text-info"><strong>&rarr;</strong></span>
+        {% if sent.compound < 0.35 and sent.compound >= 0.00 %}
+              <span class="badge badge-pill badge-warning" title="{{sent.compound}}">=</span>
+        {% endif %}
+        {% if sent.compound < 0.00 %} 
+              <span class="badge badge-pill badge-danger" title="{{sent.compound}}">-</span>
+        {% endif %}
+        {% if sent.compound >= 0.35 %}
+              <span class="badge badge-pill badge-success" title="{{sent.compound}}">+</span>
+        {% endif %} »
+        <span class="badge badge-pill badge-danger" title="{{sent.neg}}">😠 {{sent.neg|floatformat:2}}</span>
+        <span class="badge badge-pill badge-warning" title="{{sent.neu}}">😐 {{sent.neu|floatformat:2}}</span>
+        <span class="badge badge-pill badge-success" title="{{sent.pos}}">😊 {{sent.pos|floatformat:2}}</span>
+</div>
+</div>
+
+</div>
+{% endif %}
+
+<form action="{% url 'compute' %}" method="post" enctype="multipart/form-data">
+
+  {% csrf_token %}
+  {% for field in form %}
+  {% if field.errors %}
+    <div class="form-group has-error row">
+        <label class="col-sm-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+        <div class="col-sm-4">
+            {{ field }}
+            <span class="help-block">
+                {% for error in  field.errors %}{{ error }}{% endfor %}
+            </span>
+        </div>
+    </div>
+  {% else %}
+    <div class="form-group row">
+        <label class="col-sm-2 control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+        <div class="col-sm-4">
+            {{ field }}
+            {% if field.help_text %}
+                <p class="help-block"><small>{{ field.help_text }}</small></p>
+            {% endif %}
+        </div>
+    </div>
+  {% endif %}
+  {% endfor %}
+    <input type="submit" value="Compute" class="btn btn-lg btn-primary" />
+
+</form>
+<small class="text-info">(Powered by <a href="https://github.com/cjhutto/vaderSentiment">Vader</a> & <a href="http://www.nltk.org/index.html">NLTK</a>)</small>
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block contenido %}
+
+<h3>Restaurants on Province of Granada 
+<small class="text-muted">(with reviews)</small>
+</h3>
+
+  <div class="row breadcrumb">
+    <div class="col-sm"><strong>Name</strong></div>
+    <div class="col-sm"><strong>Locality</strong></div>
+    <div class="col-sm"><strong>Update at</strong></div>
+    <div class="col-sm"><strong>Rating</strong></div>
+    <div class="col-sm"><strong>Reviews Nº</strong></div>
+    <div class="col-sm"></div>
+  </div>
+    {% for r in resta %}
+    <div class="row">
+      <div class="col-sm"><strong>{{r.name}}</strong></div>
+      <div class="col-sm">{{r.locality}}</div>
+      <div class="col-sm">{{r.datetime}}</div>
+      <div class="col-sm"><h5>
+         {% if r.avg_stars == "5" %}
+             <span class="badge badge-pill badge-success">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "4.5" %}
+             <span class="badge badge-pill badge-success">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "4" %}
+             <span class="badge badge-pill badge-success">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "3.5" %}
+             <span class="badge badge-pill badge-warning">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "3" %}
+             <span class="badge badge-pill badge-warning">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "2.5" %}
+             <span class="badge badge-pill badge-warning">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "2" %}
+             <span class="badge badge-pill badge-danger">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "1.5" %}
+             <span class="badge badge-pill badge-danger">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "1" %}
+             <span class="badge badge-pill badge-danger">{{r.avg_stars}}&#9733;</span>
+         {% endif %}
+         {% if r.avg_stars == "-1" %}
+             <span class="badge badge-pill badge-dark">{{r.avg_stars}}&#9734;</span>
+         {% endif %}</h5>
+      </div>
+      <div class="col-sm">{{r.reviewsLength}}</div>
+      <div class="col-sm">
+        <a class="btn btn-md btn-secondary" href="{% url 'restaurant' r.id %}" role="button">View »</a>
+      </div>
+    </div>
+  <div class="row"><hr /></div>
+    {% endfor %}
+
+{% endblock %}
