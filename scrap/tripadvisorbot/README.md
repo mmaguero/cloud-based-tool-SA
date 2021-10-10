@@ -1,6 +1,12 @@
 TripAdvisor Scraper
 ===================
 
+# WARNING!
+**out-of-date repository!!!** 
+Sub-Repository out of date, you will most likely have to update the xpath routes and even the HTMLs URL.
+(see original repo: https://github.com/magic890/tripadvisor-scraper)
+
+
 Only for educational purposes.
 Use at own risk, it might violate TripAdvisor policies.
 
